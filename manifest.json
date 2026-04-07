@@ -1,0 +1,21 @@
+{
+  "name": "Nhật Ký Cá Nhân",
+  "short_name": "Nhật Ký",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0e17",
+  "theme_color": "#1a1a2e",
+  "description": "Nơi lưu giữ khoảnh khắc và cảm xúc hằng ngày của tôi.",
+  "icons": [
+    {
+      "src": "assets/icons/ltk_1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/ltk_2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

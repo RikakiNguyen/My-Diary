@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="description" content="Nhật ký cá nhân của tôi" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>Nhật Ký ✦</title>
+
+    <link rel="manifest" href="manifest.json" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script
+      async
+      defer
+      src="https://apis.google.com/js/api.js"
+      onload="gapiLoaded()"
+    ></script>
+    <script
+      async
+      defer
+      src="https://accounts.google.com/gsi/client"
+      onload="gisLoaded()"
+    ></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Nhật Ký <span>✦</span></div>
+      <div class="header-actions">
+        <button class="btn-icon" id="btn-drive" title="Đồng bộ Drive">
+          ☁️
+        </button>
+        <button class="btn-icon" id="btn-search-toggle" title="Tìm kiếm">
+          🔍
+        </button>
+      </div>
+    </header>
+
+    <div class="nav-tabs">
+      <button class="tab active" data-tab="write">✍️ Viết hôm nay</button>
+      <button class="tab" data-tab="entries">📖 Nhật ký</button>
+      <button class="tab" data-tab="calendar">📅 Lịch</button>
+      <button class="tab" data-tab="stats">✨ Tổng kết</button>
+    </div>
+
+    <main>
+      <div class="view active" id="view-write">
+        <div class="date-banner">
+          <div>
+            <div class="date-big" id="date-day">--</div>
+            <div
+              style="font-size: 13px; color: var(--text-muted); margin-top: 4px"
+              id="date-full"
+            >
+              --
+            </div>
+          </div>
+          <div class="date-info">
+            <div class="date-weekday" id="date-weekday">--</div>
+            <div class="date-month" id="date-month">--</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px">
+          <div
+            style="
+              font-size: 12px;
+              color: var(--text-muted);
+              margin-bottom: 8px;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            "
+          >
+            Hôm nay cảm thấy thế nào?
+          </div>
+          <div class="mood-row" id="mood-row">
+            <button class="mood-btn" data-mood="😊 Vui vẻ">😊 Vui vẻ</button>
+            <button class="mood-btn" data-mood="😌 Bình thản">
+              😌 Bình thản
+            </button>
+            <button class="mood-btn" data-mood="😔 Buồn">😔 Buồn</button>
+            <button class="mood-btn" data-mood="😤 Căng thẳng">
+              😤 Căng thẳng
+            </button>
+            <button class="mood-btn" data-mood="🥰 Hạnh phúc">
+              🥰 Hạnh phúc
+            </button>
+            <button class="mood-btn" data-mood="😴 Mệt mỏi">😴 Mệt mỏi</button>
+            <button class="mood-btn" data-mood="🤔 Suy nghĩ nhiều">
+              🤔 Suy nghĩ nhiều
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-card">
+          <div class="editor-toolbar">
+            <button
+              class="tool-btn"
+              onclick="insertText('**', '**')"
+              title="In đậm"
+            >
+              <b>B</b>
+            </button>
+            <button
+              class="tool-btn"
+              onclick="insertText('*', '*')"
+              title="Nghiêng"
+            >
+              <i>I</i>
+            </button>
+            <button
+              class="tool-btn"
+              onclick="insertText('\n- ', '')"
+              title="Danh sách"
+            >
+              ≡
+            </button>
+            <button
+              class="tool-btn"
+              onclick="insertText('\n> ', '')"
+              title="Trích dẫn"
+            >
+              "
+            </button>
+            <button
+              class="tool-btn"
+              onclick="insertText('\n---\n', '')"
+              title="Dòng kẻ"
+            >
+              —
+            </button>
+          </div>
+          <textarea
+            id="diary-content"
+            placeholder="Hôm nay của bạn như thế nào? Hãy chia sẻ với nhật ký nhé...&#10;&#10;Đừng lo lắng về văn phong, cứ viết thật thôi 🌙"
+          ></textarea>
+          <div class="editor-footer">
+            <span class="char-count"><span id="char-num">0</span> ký tự</span>
+            <div style="display: flex; gap: 8px">
+              <button class="btn btn-secondary" onclick="clearEditor()">
+                Xóa
+              </button>
+              <button class="btn btn-primary" onclick="saveEntry()">
+                Lưu nhật ký
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="drive-status" id="drive-status">
+          <div class="drive-dot offline" id="drive-dot"></div>
+          <span id="drive-text"
+            >Chưa kết nối Google Drive — dữ liệu lưu trên thiết bị</span
+          >
+        </div>
+      </div>
+
+      <div class="view" id="view-entries">
+        <div class="search-wrap" id="search-wrap" style="display: none">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            class="search-input"
+            id="search-input"
+            placeholder="Tìm kiếm trong nhật ký..."
+            oninput="renderEntries()"
+          />
+        </div>
+        <div class="section-title">📖 Tất cả nhật ký</div>
+        <div id="entries-list"></div>
+      </div>
+
+      <div class="view" id="view-calendar">
+        <div class="calendar-nav">
+          <button class="btn-icon" onclick="changeMonth(-1)">‹</button>
+          <div class="cal-title" id="cal-title">--</div>
+          <button class="btn-icon" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div style="margin-top: 24px" id="cal-entries"></div>
+      </div>
+
+      <div class="view" id="view-stats">
+        <div class="section-title">✨ Tổng kết</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-num" id="stat-total">0</span>
+            <div class="stat-label">Tổng nhật ký</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-streak">0</span>
+            <div class="stat-label">Ngày liên tiếp</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-words">0</span>
+            <div class="stat-label">Tổng từ</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-month">0</span>
+            <div class="stat-label">Tháng này</div>
+          </div>
+        </div>
+        <div class="section-title" style="margin-top: 8px">
+          💭 Cảm xúc thường gặp
+        </div>
+        <div
+          id="mood-stats"
+          style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px"
+        ></div>
+        <div class="section-title">📆 Nhật ký gần đây</div>
+        <div id="recent-entries"></div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-nav="write">
+        <span class="nav-icon">✍️</span><span>Viết</span>
+      </button>
+      <button class="nav-item" data-nav="entries">
+        <span class="nav-icon">📖</span><span>Nhật ký</span>
+      </button>
+      <button class="nav-item" data-nav="calendar">
+        <span class="nav-icon">📅</span><span>Lịch</span>
+      </button>
+      <button class="nav-item" data-nav="stats">
+        <span class="nav-icon">✨</span><span>Thống kê</span>
+      </button>
+    </nav>
+
+    <div class="modal-overlay" id="modal-view">
+      <div class="modal">
+        <div class="modal-header">
+          <div>
+            <div class="modal-title" id="modal-title">--</div>
+            <div
+              style="font-size: 13px; color: var(--text-muted); margin-top: 2px"
+              id="modal-meta"
+            >
+              --
+            </div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-content" id="modal-content"></div>
+        <div
+          style="
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            justify-content: flex-end;
+          "
+        >
+          <button class="btn btn-danger" id="modal-delete">🗑️ Xóa</button>
+          <button class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/app.js"></script>
+    <script src="js/drive.js"></script>
+    <script>
+      // Đăng ký Service Worker để web có thể chạy Offline như 1 app thực thụ
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then((reg) =>
+              console.log("✅ Service Worker đã đăng ký thành công!"),
+            )
+            .catch((err) =>
+              console.error("❌ Lỗi đăng ký Service Worker:", err),
+            );
+        });
+      }
+    </script>
+  </body>
+</html>
