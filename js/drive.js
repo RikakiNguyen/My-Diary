@@ -2,7 +2,7 @@
 // [ĐIỀU CHỈNH] CẤU HÌNH GOOGLE DRIVE
 // -> Bạn cần dán đúng mã Client ID lấy từ Cloud Console của bạn vào đây
 // ================================================================
-const CLIENT_ID = "YOUR_CLIENT_ID_HERE.apps.googleusercontent.com";
+const CLIENT_ID = "990904829675-2oa479cb2cfpljqgish50st8tfv61ad2.apps.googleusercontent.com";
 const SCOPES = "https://www.googleapis.com/auth/drive.file";
 const DRIVE_FILE_NAME = "nhatky_data.json";
 const DISCOVERY = "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest";
